@@ -29,6 +29,7 @@
   * Configure application.css
   * Configure application.rb
 * Build UI
+  * Generate Home controller + create corresponding HTML for index route 
   * Input field for slot count
   * Datetime picker
   * Search button + wired to candidate_schedules

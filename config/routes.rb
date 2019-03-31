@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  root 'home#index'
+  get 'home/index'
+
   namespace 'api' do
     namespace 'v1' do
       get 'candidate_schedules/' => 'api#candidate_schedules'
