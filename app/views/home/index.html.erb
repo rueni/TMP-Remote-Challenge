@@ -1,44 +1,164 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="h-100">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v3.8.5">
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/sticky-footer/">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <!-- Bootstrap core CSS -->
-    <link href="/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
+</head>
+  <body class="d-flex flex-column h-100">
+    <main role="main" class="flex-shrink-0">
+      <!-- Application container -->
+      <div class="container">
+        <!-- Search block -->
+        <div class="search">
+          <div class="header">
+            <h1 class="mt-5">Interview Scheduler</h1>
+            <p class="lead">Schedule a 30 minute interview with a candidate</p>
+          </div>
+          <div class="search-form">
+            <form>
+              <!-- Slot number input -->
+              <div class="form-group row">
+                <label for="count-input" class="col-sm-1 col-form-label">Slots</label>
+                <div class="col-md-4">
+                  <input type="number" class="form-control" id="count-input" value="1" placeholder="Enter number" oninput="validateCount(this)" max="5">
+                </div>
+              </div>
+              <!-- /Slot number input -->
+              <!-- /Datepicker input -->
+              <div class="form-group row">
+                <label for="flatpickr-input" class="col-sm-1 col-form-label">Date</label>
+                <div class="col-md-4">
+                  <input class="form-control" type="text" id="flatpickr-input" placeholder="Enter a date"/>
+                </div>
+              </div>
+              <!-- /Datepicker input -->
+              <!-- Search submit button -->
+              <div class="submit-search">
+                <button id="search-button" type="submit" class="btn btn-primary" onclick="clickSearch(event)">Search</button>
+              </div>
+              <!-- /Search submit button -->
+            </form>
+          </div>
+        </div>
+        <!-- /Search block -->
+        <!-- Search results -->
+        <div class="results" id="results">
+          <h1 class="mt-5">Results</h1>
+          <form class="form-inline" id="slot-form">
+            <label class="my-1 mr-2" for="selectList">Select a Slot:</label>
+            <select class="custom-select" id="selectList">
+            </select>
+            <div class="px-4">
+              <button type="submit" class="btn btn-primary" id="submit-button" onclick="clickSubmit(event)">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- Search results -->
+      </div>
+      <!-- /Application container -->
+    </main>
+  </body>
 
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+  <script type="text/javascript">
+    $("#results").hide();
+
+    $("#flatpickr-input").flatpickr({
+      enableTime: true,
+      altInput: true,
+      defaultDate: new Date().toISOString(),
+      minDate: 'today',
+      minTime: "08:00",
+      maxTime: "18:00",
+      disable: [date => {
+          let day = date.getDay();
+          return (day == 0 || day == 6);
+        },
+      ],
+      onBlur: function(rawdate, altdate, FPOBJ) {
+    		FPOBJ.close(); // Close datepicker on date select
+      },
+      onChange: function(rawdate, altdate, FPOBJ) {
+        $("#search-button").fadeIn();
+        $("#results").fadeOut();
+      }
+    });
+
+    function validateCount(input) {
+      if (!input.checkValidity()) {
+        input.classList.add('is-invalid')
+        setTimeout(function() {
+          input.reportValidity();
+        }, 1);
+      } else {
+        input.classList.remove('is-invalid')
+        if ($('#search-button').is(":hidden")) {
+          $("#search-button").fadeIn();
+          $("#results").hide();
         }
       }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="sticky-footer.css" rel="stylesheet">
-  </head>
-  <body class="d-flex flex-column h-100">
-    <!-- Begin page content -->
-  <main role="main" class="flex-shrink-0">
-    <div class="container">
-      <h1 class="mt-5">Sticky footer</h1>
-      <p class="lead">Pin a footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS.</p>
-      <p>Use <a href="/docs/4.3/examples/sticky-footer-navbar/">the sticky footer with a fixed navbar</a> if need be, too.</p>
-    </div>
-  </main>
+    }
 
-</body>
+    function clickSearch(e) {
+      e.preventDefault();
+      let countEl = $("#count-input")[0];
+      if (countEl.validity.valid) {
+        let { value } = countEl
+        $.ajax({
+          url: `api/v1/candidate_schedules/?count=${value}`,
+          type: "GET",
+          success: response => {
+            console.log('search response', response);
+            debugger
+            $('#selectList').find('option').remove()
+            $('#selectList').append(new Option('Choose...', ''));
+            const { data } = response;
+            if (data.length > 0) {
+              data.forEach(option => {
+                let date = new Date(option.availability);
+                let n = date.toDateString();
+                let time = date.toLocaleTimeString();
+                $("#selectList").append(new Option(`# ${option.slot_id} - ${n} ${time}`, option.slot_id));
+              })
+              $("#search-button").hide();
+              $("#results").fadeIn();
+            } else{
+              //  todo: build bootstrap error alert
+              alert('No results found!')
+            }
+          },
+          error: error => {
+            //  todo: build bootstrap error alert
+            alert(error.statusText)
+            console.log('error', error);
+          }
+        });
+      }
+    }
+
+    function clickSubmit(e) {
+      e.preventDefault();
+      let slot_id = $('#selectList')[0].value
+      let selected_time = new Date($("#flatpickr-input")[0].value).toISOString();
+      $.ajax({
+        url: "api/v1/schedule_interview",
+        type: "POST",
+        dataType: "json",
+        data: { slot_id, selected_time },
+        success: response => {
+          debugger
+          //  todo: build bootstrap success alert
+          console.log('submit response', response)
+          alert('Success: you\'re all set!')
+        },
+        error: error => {
+          //  todo: build bootstrap success alert
+          console.log('error', error);
+          alert(error.responseJSON.message)
+        }
+      });
+    };
+  </script>
 </html>

@@ -1,7 +1,7 @@
 module Api
   module V1
     class ApiController < ApplicationController
-
+      skip_before_action :verify_authenticity_token
       def candidate_schedules
         # curl -X GET http://localhost:3000/api/v1/candidate_schedules/?count=2
         count = params[:count].to_i
@@ -34,7 +34,7 @@ module Api
         availability_time_end = availability_time_start + 2.hours
 
         # compare slot times with users interview time
-        if (selected_time_end > availability_time_end && selected_time_start > availability_time_start)
+        if (interview_time_end > availability_time_end && interview_time_start > availability_time_start)
           render json: {
             status: 'ERROR',
             message: 'Bad Request: The slot you selected is not available'
@@ -43,13 +43,13 @@ module Api
           return
         end
 
-        diff_in_minutes = TimeDifference.between(selected_time_end.to_s, availability_time_end.to_s).in_minutes
+        diff_in_minutes = TimeDifference.between(interview_time_end.to_s, availability_time_end.to_s).in_minutes
         # 120 minute slot - interview 30 minutes => 90 min differential
         if (diff_in_minutes > 90)
             render json: {
               status: 'ERROR',
               message: 'Bad Request: The slot you selected is not available',
-              selected_time_start:  selected_time_start.to_s,
+              interview_time_start:  interview_time_start.to_s,
               availability_time_end: availability_time_end.to_s,
               diff_minutes: diff_in_minutes.to_s
             }, status: 400
