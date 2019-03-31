@@ -22,6 +22,11 @@ gem 'puma', '~> 3.11'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'flatpickr_rails'
+gem 'time_difference'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
