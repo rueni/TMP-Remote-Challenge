@@ -71,14 +71,16 @@ function clickSearch(e) {
           setTimeout(() => {
             $('#result-alert-container').fadeOut()
           }, 2500);
-
         }
       },
       error: error => {
-        //  todo: build bootstrap error alert
-        alert(error.statusText)
-        $('#result-alert-container').classList.remove('alert-success').add('alert-error').show();
-        console.log('error', error);
+        $('#result-alert-container').find('div')[0].classList.remove('alert-success');
+        $('#result-alert-container').find('div')[0].classList.add('alert-danger');
+        $('#result-title').text('Error');
+        $('#result-text').text(`Your request failed.  Please try again, at another time`);
+        setTimeout(() => {
+          $('#result-alert-container').fadeOut()
+        }, 2500);
       }
     });
   }
